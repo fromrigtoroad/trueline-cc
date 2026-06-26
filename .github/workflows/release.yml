@@ -27,7 +27,6 @@ jobs:
             --onefile `
             --windowed `
             --name "iRacingOverlay" `
-            --icon "assets/icon.ico" `
             src/main.py
 
       - name: Build installer with Inno Setup

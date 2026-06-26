@@ -14,7 +14,6 @@ DefaultDirName={autopf}\iRacingOverlay
 DefaultGroupName={#AppName}
 OutputDir=installer-output
 OutputBaseFilename=iRacingOverlay-Setup
-SetupIconFile=assets\icon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
