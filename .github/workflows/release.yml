@@ -1,0 +1,52 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - "v*"          # Triggers on tags like v1.0.0, v1.2.3
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build .exe with PyInstaller
+        run: |
+          pyinstaller `
+            --onefile `
+            --windowed `
+            --name "iRacingOverlay" `
+            --icon "assets/icon.ico" `
+            src/main.py
+
+      - name: Build installer with Inno Setup
+        run: |
+          choco install innosetup --yes
+          iscc installer.iss
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "iRacing Overlay ${{ github.ref_name }}"
+          body: |
+            ## Installation
+            1. Download `iRacingOverlay-Setup.exe` below
+            2. Double-click it and follow the installer
+            3. Launch **iRacing Overlay** from your Start Menu
+
+            ## What's new
+            <!-- Add release notes here when tagging -->
+          files: installer-output/iRacingOverlay-Setup.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
